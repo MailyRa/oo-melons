@@ -1,8 +1,7 @@
 """Classes for melon orders."""
 class AbstractMelonOrder():
-"""An abstract base class that other Melon Orders inherit from."""
+    """An abstract base class that other Melon Orders inherit from."""
 
-    #Passing order_type
     def __init__(self, species, qty, order_type, tax):
 
         self.species = species
@@ -16,7 +15,14 @@ class AbstractMelonOrder():
 
         base_price = 5
 
+        if self.species == "Christmas melons":
+
+            base_price = base_price * 1.5
+
         total = (1 + self.tax) * self.qty * base_price
+
+        if self.order_type == "international" and self.qty < 10:
+            total += 3 
 
         return total
 
@@ -25,24 +31,27 @@ class AbstractMelonOrder():
 
         self.shipped = True
 
-
-
 class DomesticMelonOrder(AbstractMelonOrder):
     """A melon order within the USA."""
     def __init__(self, species, qty):
-        super__init__(species, qty, 'domestic', 0.08)
+        super().__init__(species, qty, 'domestic', 0.08)
 
 
 
 class InternationalMelonOrder(AbstractMelonOrder):
     """An international (non-US) melon order."""
 
-    def __init__(seld, species, qty, country_code):
+    def __init__(self, species, qty, country_code):
         super().__init__(species, qty, "international", 0.17)
 
-        self.country_code = country_code
 
     def get_country_code(self):
         """Return the country code."""
 
         return self.country_code
+
+order0 = InternationalMelonOrder("watermelon", 6, "AUS")
+order1 = DomesticMelonOrder("cantaloupe", 8)
+
+
+print(order0.get_total())
